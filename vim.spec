@@ -20,13 +20,16 @@
 %define baseversion 8.1
 %define vimdir vim81
 
+%define pkgversion %{baseversion}.%(printf '%%04d' '%{patchlevel}')
+%define srcdir %{name}-%{pkgversion}
+
 Summary: The VIM editor
 URL:     http://www.vim.org/
 Name: vim
 Version: %{baseversion}.%{patchlevel}
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: Vim and MIT
-Source0: ftp://ftp.vim.org/pub/vim/unix/vim-%{baseversion}-%{patchlevel}.tar.bz2
+Source0: https://github.com/vim/vim/archive/v%{pkgversion}.tar.gz
 Source1: vim.sh
 Source2: vim.csh
 Source4: virc
@@ -221,7 +224,7 @@ with graphics and mouse capabilities.  You'll also need to install the
 vim-common package.
 
 %prep
-%setup -q -b 0 -n %{vimdir}
+%setup -q -b 0 -n %{srcdir}
 
 # use %%{__python3} macro for defining shebangs in python3 tests
 sed -i -e 's,/usr/bin/python3,%{__python3},' %{PATCH3017}
@@ -484,11 +487,11 @@ EOF
         --vendor fedora \
     %endif
         --dir %{buildroot}/%{_datadir}/applications \
-        %{_builddir}/%{vimdir}/runtime/gvim.desktop
+        %{_builddir}/%{srcdir}/runtime/gvim.desktop
         # --add-category "Development;TextEditor;X-Red-Hat-Base" D\
   %else
     mkdir -p ./%{_sysconfdir}/X11/applnk/Applications
-    cp %{_builddir}/%{vimdir}/runtime/gvim.desktop ./%{_sysconfdir}/X11/applnk/Applications/gvim.desktop
+    cp %{_builddir}/%{srcdir}/runtime/gvim.desktop ./%{_sysconfdir}/X11/applnk/Applications/gvim.desktop
   %endif
   # ja_JP.ujis is obsolete, ja_JP.eucJP is recommended.
   ( cd ./%{_datadir}/%{name}/%{vimdir}/lang; \
@@ -799,6 +802,10 @@ touch %{buildroot}/%{_datadir}/%{name}/vimfiles/doc/tags
 %{_datadir}/icons/locolor/*/apps/*
 
 %changelog
+* Thu Feb 07 2019 Filipe Brandenburger <filbranden@gmail.com> - 2:8.1.873-2
+- Update Source0: to use package released directly on GitHub, since
+  patch releases are no longer published on the old FTP URL
+
 * Mon Feb 04 2019 Zdenek Dohnal <zdohnal@redhat.com> - 2:8.1.873-1
 - patchlevel 873
 

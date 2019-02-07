@@ -1,4 +1,4 @@
-%define patchlevel 873
+%define patchlevel 877
 %if %{?WITH_SELINUX:0}%{!?WITH_SELINUX:1}
 %define WITH_SELINUX 1
 %endif
@@ -27,7 +27,7 @@ Summary: The VIM editor
 URL:     http://www.vim.org/
 Name: vim
 Version: %{baseversion}.%{patchlevel}
-Release: 2%{?dist}
+Release: 1%{?dist}
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{pkgversion}.tar.gz
 Source1: vim.sh
@@ -802,6 +802,10 @@ touch %{buildroot}/%{_datadir}/%{name}/vimfiles/doc/tags
 %{_datadir}/icons/locolor/*/apps/*
 
 %changelog
+* Thu Feb 07 2019 Filipe Brandenburger <filbranden@gmail.com> - 2:8.1.877-1
+- patchlevel 877
+- fix #1673689 - missing autoload for matchit
+
 * Thu Feb 07 2019 Filipe Brandenburger <filbranden@gmail.com> - 2:8.1.873-2
 - Update Source0: to use package released directly on GitHub, since
   patch releases are no longer published on the old FTP URL
